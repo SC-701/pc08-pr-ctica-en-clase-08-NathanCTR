@@ -11,7 +11,7 @@
 name: Build and deploy Web App
 
 env:
-  AZURE_WEBAPP_NAME: ProductoWeb2000    # Change this to your Azure Web App name
+  AZURE_WEBAPP_NAME: productointernet2000    # Change this to your Azure Web App name
   AZURE_WEBAPP_PACKAGE_PATH: './Producto.API/API'
   DOTNET_VERSION: '8.0'
 
@@ -60,7 +60,7 @@ jobs:
         run: dotnet test "Producto.API/Producto.API.sln" --no-restore --verbosity normal --configuration Release || echo "No tests found or test execution failed"
 
       - name: dotnet publish
-        run: dotnet publish "Vehiculos.WEB/Web/Web.csproj" -c Release -o ./publish --no-restore
+        run: dotnet publish "Producto.WEB/Web/Web.csproj" -c Release -o ./publish --no-restore
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
