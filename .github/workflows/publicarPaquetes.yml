@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - 'pc08-pr-ctica-en-clase-08-NathanCTR/Producto.Autorizacion/**'
+      - 'Producto.Autorizacion/**'
   workflow_dispatch:
 
 permissions:
@@ -25,22 +25,25 @@ jobs:
 
       - name: Restaurar dependencias
         run: |
-          cd pc08-pr-ctica-en-clase-08-NathanCTR/Producto.Autorizacion
-          dotnet restore
+          cd Producto.Autorizacion/Middleware
+          dotnet restore Middleware.csproj
 
       - name: Compilar en Release
         run: |
-          cd pc08-pr-ctica-en-clase-08-NathanCTR/Producto.Autorizacion
-          dotnet build --configuration Release --no-restore
+          cd Producto.Autorizacion/Middleware
+          dotnet build Middleware.csproj --configuration Release --no-restore
 
       - name: Cleanup old .nupkg files
         run: |
-          rm -f pc08-pr-ctica-en-clase-08-NathanCTR/Producto.Autorizacion/nupkgs/*.nupkg
+          rm -f Producto.Autorizacion/Middleware/nupkgs/*.nupkg
 
       - name: Empaquetar (dotnet pack)
         run: |
-          cd pc08-pr-ctica-en-clase-08-NathanCTR/Producto.Autorizacion
-          dotnet pack --configuration Release --no-build --output ./nupkgs
+          cd Producto.Autorizacion/Middleware
+          dotnet pack Middleware.csproj \
+            --configuration Release \
+            --no-build \
+            --output ./nupkgs
 
       - name: Set up NuGet sources
         run: dotnet nuget add source "https://nuget.pkg.github.com/SC-701/index.json" \
@@ -51,7 +54,7 @@ jobs:
 
       - name: Publicar en GitHub Packages
         run: |
-          cd pc08-pr-ctica-en-clase-08-NathanCTR/Producto.Autorizacion
+          cd Producto.Autorizacion/Middleware
           dotnet nuget push ./nupkgs/*.nupkg \
             --source "https://nuget.pkg.github.com/SC-701/index.json" \
             --api-key ${{ secrets.GITHUB_TOKEN }} \
