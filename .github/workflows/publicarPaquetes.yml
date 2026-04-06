@@ -25,27 +25,27 @@ jobs:
 
       - name: Restaurar dependencias
         run: |
-          cd Producto.Autorizacion/Middleware
-          dotnet restore Middleware.csproj
+          cd Producto.Autorizacion/Abstracciones
+          dotnet restore Abstracciones.csproj
 
       - name: Compilar en Release
         run: |
-          cd Producto.Autorizacion/Middleware
-          dotnet build Middleware.csproj --configuration Release --no-restore
+          cd Producto.Autorizacion/Abstracciones
+          dotnet build Abstracciones.csproj --configuration Release --no-restore
 
       - name: Cleanup old .nupkg files
         run: |
-          rm -f Producto.Autorizacion/Middleware/nupkgs/*.nupkg
+          rm -f Producto.Autorizacion/Abstracciones/nupkgs/*.nupkg
 
       - name: Empaquetar (dotnet pack)
         run: |
-          cd Producto.Autorizacion/Middleware
-          dotnet pack Middleware.csproj --configuration Release --no-build --output ./nupkgs
+          cd Producto.Autorizacion/Abstracciones
+          dotnet pack Abstracciones.csproj --configuration Release --no-build --output ./nupkgs
 
       - name: Set up NuGet sources
         run: dotnet nuget add source "https://nuget.pkg.github.com/SC-701/index.json" --name "github" --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text
 
       - name: Publicar en GitHub Packages
         run: |
-          cd Producto.Autorizacion/Middleware
+          cd Producto.Autorizacion/Abstracciones
           dotnet nuget push ./nupkgs/*.nupkg --source "https://nuget.pkg.github.com/SC-701/index.json" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
